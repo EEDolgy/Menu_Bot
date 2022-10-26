@@ -1,0 +1,90 @@
+CREATE SCHEMA IF NOT EXISTS `mama_doma` DEFAULT CHARACTER SET utf8 ;
+USE `mama_doma` ;
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username_tg` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(100) NULL,
+  `surname` VARCHAR(100) NULL,
+  `telephone` VARCHAR(45) NULL,
+  `adress` VARCHAR(1000) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `username_tg_UNIQUE` (`username_tg` ASC) VISIBLE);
+
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`dates_menu`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`dates_menu` (
+  `date` DATE NOT NULL,
+  `foto` MEDIUMBLOB NULL,
+  `description` TEXT(1000) NULL,
+  PRIMARY KEY (`date`),
+  UNIQUE INDEX `date_UNIQUE` (`date` ASC) VISIBLE);
+
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`orders`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`orders` (
+  `id_order` INT NOT NULL AUTO_INCREMENT,
+  `id_user` INT NOT NULL,
+  `date` DATE NULL,
+  `Meat` ENUM('1', '2', '0') NOT NULL,
+  `Side dish` ENUM('1', '1,5', '0') NOT NULL,
+  `Soup` ENUM('1', '1,5', '0') NOT NULL,
+  `Salad` ENUM('1', '1,5', '0') NOT NULL,
+  `Replacement` ENUM('1', '1,5', '0') NOT NULL,
+  `Comment` NVARCHAR(1000) NULL,
+  PRIMARY KEY (`id_order`),
+  INDEX `usr_idx` (`id_user` ASC) VISIBLE,
+  UNIQUE INDEX `id_order_UNIQUE` (`id_order` ASC) VISIBLE,
+  INDEX `date_idx` (`date` ASC) VISIBLE,
+  CONSTRAINT `usr`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `mama_doma`.`users` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE NO ACTION,
+  CONSTRAINT `date`
+    FOREIGN KEY (`date`)
+    REFERENCES `mama_doma`.`dates_menu` (`date`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`Extra_wishes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`Extra_wishes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `date_recieved` DATE NOT NULL,
+  `username_tg` VARCHAR(100) NOT NULL,
+  `text` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  INDEX `username_tg_idx` (`username_tg` ASC) VISIBLE);
+
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`Meta_info`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`Meta_info` (
+  `info_type` VARCHAR(50) NOT NULL,
+  `text` NVARCHAR(1000) NULL,
+  PRIMARY KEY (`info_type`),
+  UNIQUE INDEX `info_type_UNIQUE` (`info_type` ASC) VISIBLE);
+
+
+-- -----------------------------------------------------
+-- Table `mama_doma`.`Special_permissions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mama_doma`.`Special_permissions` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username_tg` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `username_tg_UNIQUE` (`username_tg` ASC) VISIBLE);
